@@ -12,7 +12,7 @@ export async function extractPDF(file) {
     const pageText = content.items.map(function (item) { return item.str }).join(" ")
     fullText += pageText + "\n"
   }
-  return fullText.slice(0, 20000)
+  return fullText.slice(0, 5000)
 }
 
 function loadScript(src) {
