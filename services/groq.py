@@ -28,23 +28,29 @@ Answer clearly and concisely based only on the paper content.
 
 QUESTION: {question}"""
 
-    try:
-        response = client.chat.completions.create(
-            model="llama-3.1-8b-instant",
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_message}
-            ],
-            temperature=0.3,
-            max_tokens=200
-        )
-        return response.choices[0].message.content
-    except Exception as e:
-        print(f"Groq API Error: {e}")
-        # Return a spoken error message rather than crashing with 500
-        error_str = str(e).lower()
-        if "429" in error_str or "rate limit" in error_str:
-            return "I am receiving too many requests at the moment. Please wait a few seconds and try again."
-        if "context length" in error_str or "too many tokens" in error_str:
-            return "The document is too large for me to process. Please try a shorter document."
-        return "I encountered an internal error while thinking about your question. Please try again."
+    import time
+    for attempt in range(3):
+        try:
+            response = client.chat.completions.create(
+                model="llama-3.1-8b-instant",
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_message}
+                ],
+                temperature=0.3,
+                max_tokens=200
+            )
+            return response.choices[0].message.content
+        except Exception as e:
+            error_str = str(e).lower()
+            if ("429" in error_str or "rate limit" in error_str) and attempt < 2:
+                print(f"Groq Rate Limit hit. Retrying in 2 seconds... (Attempt {attempt+1}/3)")
+                time.sleep(2)
+                continue
+            
+            print(f"Groq API Error: {e}")
+            if "429" in error_str or "rate limit" in error_str:
+                return "I am receiving too many requests at the moment. Please wait a few seconds and try again."
+            if "context length" in error_str or "too many tokens" in error_str:
+                return "The document is too large for me to process. Please try a shorter document."
+            return "I encountered an internal error while thinking about your question. Please try again."
