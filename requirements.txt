@@ -41,7 +41,7 @@ Django==5.0.6
 django-cors-headers==4.9.0
 djangorestframework==3.16.1
 djangorestframework_simplejwt==5.5.1
-docutils==0.22.4
+docutils==0.21.2
 dpath==2.2.0
 dulwich==1.1.0
 dvc==3.66.1
