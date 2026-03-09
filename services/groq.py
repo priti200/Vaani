@@ -1,6 +1,5 @@
-# services/groq.py
-
 import os
+import time
 from groq import Groq
 from dotenv import load_dotenv
 
@@ -8,13 +7,14 @@ load_dotenv()
 
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
-
 def ask_groq(question: str, pdf_text: str, language_code: str) -> str:
 
     if language_code == "hi-IN":
         lang_note = "Answer in Hindi (Devanagari script). Keep it under 100 words."
     elif language_code == "bn-IN":
         lang_note = "Answer in Bengali. Keep it under 100 words."
+    elif language_code == "ml-IN":
+        lang_note = "Answer in Malayalam script. Keep it under 100 words."
     else:
         lang_note = "Answer in English. Keep it under 100 words."
 
@@ -28,7 +28,6 @@ Answer clearly and concisely based only on the paper content.
 
 QUESTION: {question}"""
 
-    import time
     for attempt in range(3):
         try:
             response = client.chat.completions.create(
@@ -47,7 +46,6 @@ QUESTION: {question}"""
                 print(f"Groq Rate Limit hit. Retrying in 2 seconds... (Attempt {attempt+1}/3)")
                 time.sleep(2)
                 continue
-            
             print(f"Groq API Error: {e}")
             if "429" in error_str or "rate limit" in error_str:
                 return "I am receiving too many requests at the moment. Please wait a few seconds and try again."

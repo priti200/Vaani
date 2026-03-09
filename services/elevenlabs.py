@@ -8,9 +8,9 @@ load_dotenv()
 
 client = ElevenLabs(api_key=os.getenv("ELEVENLABS_API_KEY"))
 
-# Voice IDs
-VOICE_HINDI_FEMALE = "xoV6iGVuOGYHLWjXhVC7"   # Muskaan - Casual Hindi Female
-VOICE_ENGLISH_MALE = "JBFqnCBsd6RMkjVDRZzb"   # George - English Male
+VOICE_HINDI_FEMALE = "xoV6iGVuOGYHLWjXhVC7"    # Muskaan - Hindi Female
+VOICE_ENGLISH_MALE = "JBFqnCBsd6RMkjVDRZzb"    # George - English Male
+VOICE_MALAYALAM_FEMALE = "kdmDKzBYMFOaFNAMHaFG" # Priya - Malayalam Female
 
 def speech_to_text(audio_bytes: bytes, language_code: str) -> str:
     lang = language_code.split("-")[0]
@@ -26,6 +26,8 @@ def speech_to_text(audio_bytes: bytes, language_code: str) -> str:
 def text_to_speech(text: str, language_code: str) -> str:
     if language_code == "hi-IN":
         voice_id = VOICE_HINDI_FEMALE
+    elif language_code == "ml-IN":
+        voice_id = VOICE_MALAYALAM_FEMALE
     else:
         voice_id = VOICE_ENGLISH_MALE
 
