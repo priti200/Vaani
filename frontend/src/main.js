@@ -1,5 +1,6 @@
 import { startRecording, stopRecording } from "./recorder.js"
-import { speechToText, textToSpeech, playAudio } from "./sarvam.js"
+// import { speechToText, textToSpeech, playAudio } from "./sarvam.js"
+import { speechToText, textToSpeech, playAudio } from "./elevenlabs.js"
 import { askGroq } from "./groq.js"
 import { extractPDF } from "./pdf.js"
 import { addMessage, addTyping, setStatus, setTranscript, clearTextarea, autoResize, audioStore } from "./ui.js"
